@@ -6,14 +6,31 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.89" :scope "provided"]
+                 [org.clojure/tools.logging "0.3.1"]
+                 [ch.qos.logback/logback-classic "1.1.7"]
+
                  [com.cognitect/transit-clj "0.8.285"]
+                 [com.cognitect/transit-cljs "0.8.239"]
+
                  [ring "1.4.0"]
                  [ring/ring-defaults "0.2.0"]
                  [bk/ring-gzip "0.1.1"]
                  [ring.middleware.logger "0.5.0"]
                  [compojure "1.5.0"]
+
+                 [slingshot "0.12.2"]
+                 [bidi "2.0.9"]
+                 [cheshire "5.6.1"]
+                 [camel-snake-kebab "0.4.0"]
                  [environ "1.0.3"]
-                 [org.omcljs/om "1.0.0-alpha36"]]
+
+                 [conman "0.6.0"]
+                 [com.h2database/h2 "1.4.192"]
+
+                 [cljsjs/react "15.3.0-0"]
+                 [cljsjs/react-dom "15.3.0-0" :exclusions [cljsjs/react]]
+                 [org.omcljs/om "1.0.0-alpha41"]
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
@@ -104,9 +121,15 @@
 
   :profiles {:dev
              {:dependencies [[figwheel "0.5.4-4"]
-                             [figwheel-sidecar "0.5.4-4"]
+                             [figwheel-sidecar "0.5.4-7" :exclusions [ring/ring-core
+                                                                      ring/ring-codec
+                                                                      commons-io
+                                                                      clj-time
+                                                                      joda-time]]
+                             [devcards "0.2.1-7"]
                              [com.cemerick/piggieback "0.2.1"]
-                             [org.clojure/tools.nrepl "0.2.12"]]
+                             [org.clojure/tools.nrepl "0.2.12"]
+                             [binaryage/devtools "0.8.0"]]
 
               :plugins [[lein-figwheel "0.5.4-4"]
                         [lein-doo "0.1.6"]]
