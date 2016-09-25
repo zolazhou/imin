@@ -2,7 +2,7 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+            :url  "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.89" :scope "provided"]
@@ -24,8 +24,7 @@
                  [camel-snake-kebab "0.4.0"]
                  [environ "1.0.3"]
 
-                 [conman "0.6.0"]
-                 [com.h2database/h2 "1.4.192"]
+                 [clj-http "2.2.0"]
 
                  [cljsjs/react "15.3.0-0"]
                  [cljsjs/react-dom "15.3.0-0" :exclusions [cljsjs/react]]
@@ -48,40 +47,44 @@
   ;; Use `lein run` if you just want to start a HTTP server, without figwheel
   :main imin.server
 
+  :migratus {:store :database
+             :db    "jdbc:h2:./h2.db"}
+
+
   ;; nREPL by default starts in the :main namespace, we want to start in `user`
   ;; because that's where our development helper functions like (run) and
   ;; (browser-repl) live.
   :repl-options {:init-ns user}
 
   :cljsbuild {:builds
-              [{:id "app"
+              [{:id           "app"
                 :source-paths ["src/cljs" "src/cljc"]
 
                 :figwheel true
                 ;; Alternatively, you can configure a function to run every time figwheel reloads.
                 ;; :figwheel {:on-jsload "imin.core/on-figwheel-reload"}
 
-                :compiler {:main imin.core
-                           :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/imin.js"
-                           :output-dir "resources/public/js/compiled/out"
+                :compiler {:main                 imin.core
+                           :asset-path           "js/compiled/out"
+                           :output-to            "resources/public/js/compiled/imin.js"
+                           :output-dir           "resources/public/js/compiled/out"
                            :source-map-timestamp true}}
 
-               {:id "test"
+               {:id           "test"
                 :source-paths ["src/cljs" "test/cljs" "src/cljc" "test/cljc"]
-                :compiler {:output-to "resources/public/js/compiled/testable.js"
-                           :main imin.test-runner
-                           :optimizations :none}}
+                :compiler     {:output-to     "resources/public/js/compiled/testable.js"
+                               :main          imin.test-runner
+                               :optimizations :none}}
 
-               {:id "min"
+               {:id           "min"
                 :source-paths ["src/cljs" "src/cljc"]
-                :jar true
-                :compiler {:main imin.core
-                           :output-to "resources/public/js/compiled/imin.js"
-                           :output-dir "target"
-                           :source-map-timestamp true
-                           :optimizations :advanced
-                           :pretty-print false}}]}
+                :jar          true
+                :compiler     {:main                 imin.core
+                               :output-to            "resources/public/js/compiled/imin.js"
+                               :output-dir           "target"
+                               :source-map-timestamp true
+                               :optimizations        :advanced
+                               :pretty-print         false}}]}
 
   ;; When running figwheel from nREPL, figwheel will read this configuration
   ;; stanza, but it will read it without passing through leiningen's profile
@@ -91,7 +94,7 @@
   :figwheel {;; :http-server-root "public"       ;; serve static assets from resources/public/
              ;; :server-port 3449                ;; default
              ;; :server-ip "127.0.0.1"           ;; default
-             :css-dirs ["resources/public/css"]  ;; watch and update CSS
+             :css-dirs ["resources/public/css"] ;; watch and update CSS
 
              ;; Instead of booting a separate server on its own port, we embed
              ;; the server ring handler inside figwheel's http-kit server, so
@@ -139,7 +142,7 @@
 
              :uberjar
              {:source-paths ^:replace ["src/clj" "src/cljc"]
-              :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
-              :hooks []
-              :omit-source true
-              :aot :all}})
+              :prep-tasks   ["compile" ["cljsbuild" "once" "min"]]
+              :hooks        []
+              :omit-source  true
+              :aot          :all}})
